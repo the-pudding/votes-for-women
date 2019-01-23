@@ -1,0 +1,42 @@
+<div class='sidebar'>
+	<div class='sidebar__info'>
+		<h1>{{{doc.hed}}}</h1>
+		<div class='info__text'>
+			{{#each doc.sidebar}}
+			<p>{{{value}}}</p>
+			{{/each}}
+		</div>
+	</div>
+
+	<nav class='sidebar__nav'>
+		<div class='nav__slider slider'></div>
+
+		<div class='nav__sort'>
+			<p class='nav__title'>{{{doc.sortTitle}}}</p>
+			<ul>
+				{{#each doc.sort}}
+				<li><button data-value='{{value}}'>{{text}}</button></li>
+				{{/each}}
+			</ul>
+		</div>
+
+		<div class='nav__filter-party'>
+			<p class='nav__title'>{{{doc.filterPartyTitle}}}</p>
+			<ul>
+				{{#each doc.filterParty}}
+				<li><button data-value='{{value}}'>{{text}}</button></li>
+				{{/each}}
+			</ul>
+		</div>
+
+		<div class='nav__filter-issues'>
+			<p class='nav__title'>{{{doc.filterIssuesTitle}}}</p>
+			<ul>
+				{{#each doc.filterIssues}}
+				<li><button data-value='{{value}}'>{{text}}</button></li>
+				{{/each}}
+			</ul>
+		</div>
+		
+	</nav>
+</div>
