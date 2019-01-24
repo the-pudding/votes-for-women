@@ -1,5 +1,6 @@
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
+const $platforms = $mainbar.select('.graphic__platforms');
 
 let yearData = [];
 let issueData = [];
@@ -7,25 +8,6 @@ let issueData = [];
 function resize() {
 	const height = window.innerHeight;
 	$mainbar.st({ height });
-}
-
-function cleanYears(data, candidates) {
-	return d3
-		.nest()
-		.key(d => d.year)
-		.entries(data)
-		.map(d => ({
-			...d,
-			values: d.values.map(v => ({
-				...v,
-				grafTotal: +v.grafTotal,
-				grafWomen: +v.grafWomen,
-				wordTotal: +v.wordTotal,
-				wordWomen: +v.wordWomen,
-				percentWord: +v.percentWord,
-				candidate: candidates.find(c => c.key === v.key).candidate
-			}))
-		}));
 }
 
 function cleanIssue(data) {
@@ -37,16 +19,43 @@ function cleanIssue(data) {
 	}));
 }
 
+function setupFigure() {
+	const $year = $platforms
+		.selectAll('.year')
+		.data(yearData)
+		.enter()
+		.append('div.year');
+
+	$year.append('h3').text(d => d.key);
+	const $parties = $year.append('div.parties');
+
+	const $party = $parties
+		.selectAll('.party')
+		.data(d => d.values)
+		.enter()
+		.append('div.party');
+
+	const $info = $party.append('div.info');
+	const $figure = $party.append('figure');
+
+	$info.append('p.party-name').text(d => d.party);
+
+	$figure
+		.selectAll('.graf')
+		.data(d => d3.range(d.grafTotal))
+		.enter()
+		.append('p.graf');
+}
+
 function loadData() {
 	d3.loadData(
-		'assets/data/platforms.csv',
-		'assets/data/candidates.json',
+		'assets/data/platforms.json',
 		'assets/data/issues.json',
 		(err, response) => {
 			if (err) console.log(err);
-			yearData = cleanYears(response[0], response[1]);
-			issueData = cleanIssue(response[2]);
-			console.log({ yearData, issueData });
+			yearData = response[0].sort((a, b) => d3.ascending(+a.key, +b.key));
+			issueData = cleanIssue(response[1]);
+			setupFigure();
 		}
 	);
 }
