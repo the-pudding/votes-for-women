@@ -9,7 +9,7 @@ function resize() {
 	$mainbar.st({ height });
 }
 
-function cleanYears(data) {
+function cleanYears(data, candidates) {
 	return d3
 		.nest()
 		.key(d => d.year)
@@ -22,7 +22,8 @@ function cleanYears(data) {
 				grafWomen: +v.grafWomen,
 				wordTotal: +v.wordTotal,
 				wordWomen: +v.wordWomen,
-				percentWord: +v.percentWord
+				percentWord: +v.percentWord,
+				candidate: candidates.find(c => c.key === v.key).candidate
 			}))
 		}));
 }
@@ -39,11 +40,12 @@ function cleanIssue(data) {
 function loadData() {
 	d3.loadData(
 		'assets/data/platforms.csv',
+		'assets/data/candidates.json',
 		'assets/data/issues.json',
 		(err, response) => {
 			if (err) console.log(err);
-			yearData = cleanYears(response[0]);
-			issueData = cleanIssue(response[1]);
+			yearData = cleanYears(response[0], response[1]);
+			issueData = cleanIssue(response[2]);
 			console.log({ yearData, issueData });
 		}
 	);
