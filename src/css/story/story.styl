@@ -16,6 +16,15 @@ section
 	transform translate3d(0,0,0)
 
 button
-	background transparent
+	background-color transparent
 	border 1px solid $fg
 	padding 0.5em
+	font-family $sans
+	font-weight 500
+	&:hover
+		background-color $bg-darkest
+	&.is-active
+		background-color $fg-lighter
+		color $bg
+		font-weight 700
+	

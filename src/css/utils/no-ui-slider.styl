@@ -292,11 +292,13 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 		background-color transparent
 	&.noUi-horizontal
 		cursor pointer
-		height 20px
+		height 14px
 		background transparent
 		
 		.noUi-connect
-			opacity 0.5
+			opacity 0.67
+			top 1px
+			background $fg-lightest
 
 		.noUi-base
 			height 100%
@@ -312,12 +314,12 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 
 		.noUi-handle
 			outline none
-			width 20px
-			height 20px
+			width 24px
+			height 24px
 			left -@width * 0.5
-			top 0
+			top -6px
 			border 2px solid $fg
-			background-color $primary
+			background-color $bg-darker
 			border-radius 50%
 			box-shadow none
 			cursor pointer
@@ -326,3 +328,11 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 			&:after
 				display none
 		
+		.noUi-tooltip
+			background transparent
+			set-type-size(small)
+			color $fg
+			border none
+			bottom auto
+			top 0
+			transform translate(-50%, 24px)

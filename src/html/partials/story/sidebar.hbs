@@ -1,14 +1,15 @@
 <div class='sidebar'>
 	<div class='sidebar__info'>
-		<h1>{{{doc.hed}}}</h1>
+		<h1 class='info__hed'>{{{doc.hed}}}</h1>
 		<div class='info__text'>
-			{{#each doc.sidebar}}
-			<p>{{{value}}}</p>
-			{{/each}}
+			<p class='text__intro'>{{{doc.intro}}}</p>
+			<p class='text__video'><button>{{{doc.video}}} @@include('play-circle.svg')</button></p>
+			<p class='text__instruction'>{{{doc.instruction}}}</p>
 		</div>
 	</div>
 
 	<nav class='sidebar__nav'>
+		<p class='nav__title'>{{{doc.sliderTitle}}}</p>
 		<div class='nav__slider slider'></div>
 
 		<div class='nav__sort'>
@@ -39,4 +40,12 @@
 		</div>
 		
 	</nav>
+
+	<p class='sidebar__credit'>
+		By <a href='{{meta.author.url}}' target='_blank'>
+			<strong>{{meta.author.name}}</strong>
+		</a> &amp; <a href='{{meta.author2.url}}' target='_blank'>
+			<strong>{{meta.author2.name}}</strong>
+		</a> in collaboration with the <a href='' target='_blank'>National Portrait Gallery</a>.
+	</p>
 </div>

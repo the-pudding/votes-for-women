@@ -11,6 +11,11 @@
         "id": "1F82-ehyijRkbdqlgeWGgcrvwOGNqhPKhsuSPNL8wxRc",
         "gid": "431678308",
         "filepath": "src/assets/data/issues.json"
+      },
+      {
+        "id": "1F82-ehyijRkbdqlgeWGgcrvwOGNqhPKhsuSPNL8wxRc",
+        "gid": "406880894",
+        "filepath": "src/assets/data/candidates.json"
       }
     ]
   }

@@ -3,6 +3,9 @@ import noUiSlider from 'nouislider';
 const $main = d3.select('main');
 const $sidebar = $main.select('.sidebar');
 const $slider = $main.select('.slider');
+const $btnSort = $sidebar.selectAll('.nav__sort button');
+const $btnFilterParty = $sidebar.selectAll('.nav__filter-party button');
+const $btnFilterIssues = $sidebar.selectAll('.nav__filter-issues button');
 
 function resize() {}
 
@@ -22,18 +25,25 @@ function handleSlide(value) {
 }
 
 function handleSortClick() {
-	const value = d3.select(this).at('data-value');
-	console.log({ value });
+	const $btn = d3.select(this);
+	const value = $btn.at('data-value');
+	const active = $btn.classed('is-active');
+	$btnSort.classed('is-active', false);
+	$btn.classed('is-active', !active);
 }
 
 function handleFilterPartyClick() {
-	const value = d3.select(this).at('data-value');
-	console.log({ value });
+	const $btn = d3.select(this);
+	const value = $btn.at('data-value');
+	const active = $btn.classed('is-active');
+	$btn.classed('is-active', !active);
 }
 
 function handleFilterIssuesClick() {
-	const value = d3.select(this).at('data-value');
-	console.log({ value });
+	const $btn = d3.select(this);
+	const value = $btn.at('data-value');
+	const active = $btn.classed('is-active');
+	$btn.classed('is-active', !active);
 }
 
 function setupSlider() {
@@ -45,14 +55,14 @@ function setupSlider() {
 		start,
 		step: 4,
 		connect: true,
-		// tooltips: [
-		// 	{
-		// 		to: value => {
-		// 			const data = nestedData[Math.round(value)];
-		// 			return data.dateDisplay.slice(4);
-		// 		}
-		// 	}
-		// ],
+		tooltips: [
+			{
+				to: value => value
+			},
+			{
+				to: value => value
+			}
+		],
 		range: {
 			min,
 			max
@@ -64,13 +74,9 @@ function setupSlider() {
 }
 
 function setupNav() {
-	$sidebar.selectAll('.nav__sort button').on('click', handleSortClick);
-	$sidebar
-		.selectAll('.nav__filter-party button')
-		.on('click', handleFilterPartyClick);
-	$sidebar
-		.selectAll('.nav__filter-issues button')
-		.on('click', handleFilterIssuesClick);
+	$btnSort.on('click', handleSortClick).classed('is-active', (d, i) => i === 0);
+	$btnFilterParty.on('click', handleFilterPartyClick);
+	$btnFilterIssues.on('click', handleFilterIssuesClick);
 }
 
 function init() {
