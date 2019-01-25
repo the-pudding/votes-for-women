@@ -1,7 +1,11 @@
 const $header = d3.select('header');
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
-const $platforms = $mainbar.select('.graphic__platforms');
+const $sidebar = $main.select('.sidebar');
+const $graphic = $mainbar.select('.section__graphic');
+const $platforms = $graphic.select('.graphic__platforms');
+
+let $year = null;
 let $party = null;
 let $figure = null;
 
@@ -10,6 +14,7 @@ let yearData = [];
 let issueData = [];
 
 let wordTotalMax = 0;
+let offX = 0;
 
 function updateFigure(figureH) {
 	const grafM = 1;
@@ -52,15 +57,46 @@ function updateFigure(figureH) {
 function resize() {
 	const height = window.innerHeight - $header.node().offsetHeight;
 	$mainbar.st({ height });
-	const yearH = $platforms.select('.year').node().offsetHeight;
+
+	const $visibleYear = $platforms.select('.year:not(.is-hidden)');
+
+	const yearH = $visibleYear.node().offsetHeight;
 	const infoH = $platforms.select('.info').node().offsetHeight;
 	const figureH = yearH - infoH;
 	$figure.st('height', figureH);
+
+	const yearMargin = +$visibleYear.st('margin-left').replace('px', '');
+	offX = $sidebar.node().offsetWidth + yearMargin;
 	updateFigure(figureH);
+}
+
+function getNextPos(dir) {
+	const width = $graphic.node().offsetWidth - offX;
+	const output = [];
+	$platforms.selectAll('.year:not(.is-hidden)').each((d, i, n) => {
+		let { left } = n[i].getBoundingClientRect();
+		left -= offX;
+		const offLeft = left - width; // how far from right edge of screen
+		const offRight = left + width;
+		output.push({ i, left, offLeft, offRight });
+	});
+	// forward
+	if (dir === 1) {
+		output.reverse();
+		const { left } = output.find(d => d.offLeft < 0);
+		return -left;
+	}
+	// back
+	const { left } = output.find(d => d.offRight > 0);
+	return -left;
 }
 
 function handleNavClick() {
 	const dir = +d3.select(this).at('data-dir');
+	const x = +$platforms.st('left').replace('px', '');
+	const nextPos = getNextPos(dir);
+	const left = x + nextPos;
+	$platforms.st({ left });
 }
 
 function setupNav() {
@@ -68,13 +104,14 @@ function setupNav() {
 }
 
 function setupFigure() {
-	const $year = $platforms
+	$year = $platforms
 		.selectAll('.year')
 		.data(yearData)
 		.enter()
 		.append('div.year');
 
-	$year.at('data-year', d => d.key);
+	$year.at('data-year', d => d.key).classed('is-hidden', d => +d.key < 1920);
+
 	$year.append('h3.hed').text(d => d.key);
 	const $parties = $year.append('div.parties');
 

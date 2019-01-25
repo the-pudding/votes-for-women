@@ -49,7 +49,7 @@ function handleFilterIssuesClick() {
 function setupSlider() {
 	const min = 1840;
 	const max = 2016;
-	const start = [min, max];
+	const start = [1920, max];
 
 	const slider = noUiSlider.create($slider.node(), {
 		start,
