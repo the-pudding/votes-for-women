@@ -4,6 +4,7 @@ const $mainbar = $main.select('.mainbar');
 const $sidebar = $main.select('.sidebar');
 const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
+const $tooltip = $graphic.select('.tooltip');
 
 let $year = null;
 let $party = null;
@@ -13,34 +14,91 @@ let platformData = [];
 let yearData = [];
 let issueData = [];
 
+let headerH = 0;
 let wordTotalMax = 0;
 let offX = 0;
 
+function handleMouseMove() {}
+
+function handleMouseLeave() {
+	$tooltip.classed('is-visible', false);
+}
+
+function handlGrafEnter(d) {
+	const { left, top } = d3
+		.select(this)
+		.node()
+		.getBoundingClientRect();
+	const max = 200;
+	if (d.issue) {
+		const { start, end, excerpt, text } = d.issue;
+		const diff = end - start;
+		const pad = diff < max ? Math.floor((max - diff) / 2) : 0;
+		const startPad = Math.max(0, start - pad);
+		const endPad = Math.max(text.length, end + pad);
+		const sub = text.substring(startPad, endPad);
+		// clean break
+		const startClean = startPad ? sub.indexOf(' ') : 0;
+		const endClean =
+			endPad !== text.length ? sub.lastIndexOf(' ') : text.length;
+		const clean = sub.substring(startClean, endClean);
+
+		const before = clean.substring(0, start - startPad);
+		const between = clean.substring(start - startPad, start - startPad + diff);
+		const after = clean.substring(start - startPad + diff, clean.length);
+
+		const eBefore = startClean ? '...' : '';
+		const eAfter = endClean !== text.length ? '...' : '';
+		const html = `“${eBefore}${before}<mark>${between}</mark>${after}${eAfter}”`;
+		console.log({
+			excerpt,
+			endClean,
+			startClean,
+			clean,
+			diff,
+			pad,
+			start,
+			startPad,
+			end,
+			endPad,
+			sub,
+			before,
+			between,
+			after
+		});
+		$tooltip.select('p').html(html);
+		$tooltip.st({ left, top: top - headerH }).classed('is-visible', true);
+	}
+}
+
 function updateFigure(figureH) {
 	const grafM = 1;
-	const grafH = 2;
-	const count = Math.floor(figureH / (grafH + grafM));
+	const grafH = 3;
+	const count = Math.floor(figureH / grafH);
 
-	const $graf = $figure.selectAll('.graf').data(d => {
-		const numLines = Math.floor((d.wordTotal / wordTotalMax) * count);
-		const lines = d3.range(numLines).map(i => ({ index: i }));
-		d.issues.forEach(issue => {
-			let target = Math.floor(issue.percent * numLines);
-			let placed = false;
-			while (!placed) {
-				if (!lines[target].issue) {
-					lines[target].issue = { ...issue };
-					placed = true;
-				} else target += 1;
+	const $graf = $figure
+		.select('.grafs')
+		.selectAll('.graf')
+		.data(d => {
+			const numLines = Math.floor((d.wordTotal / wordTotalMax) * count);
+			const lines = d3.range(numLines).map(i => ({ index: i }));
+			d.issues.forEach(issue => {
+				let target = Math.floor(issue.percent * numLines);
+				let placed = false;
+				while (!placed) {
+					if (!lines[target].issue) {
+						lines[target].issue = { ...issue };
+						placed = true;
+					} else target += 1;
 
-				if (target >= lines.length) {
-					lines.push({ index: lines.length });
+					if (target >= lines.length) {
+						lines.push({ index: lines.length });
+					}
 				}
-			}
-		});
+			});
 
-		return lines;
-	});
+			return lines;
+		});
 
 	const $grafEnter = $graf.enter().append('p.graf');
 
@@ -48,14 +106,16 @@ function updateFigure(figureH) {
 
 	$grafMerge
 		.st('height', grafH)
-		.st('margin-bottom', grafM)
-		.classed('is-issue', d => d.issue);
+		.st('border-bottom', `${grafM}px solid #fff`)
+		.classed('is-issue', d => d.issue)
+		.on('mouseenter', handlGrafEnter);
 
 	$graf.exit().remove();
 }
 
 function resize() {
-	const height = window.innerHeight - $header.node().offsetHeight;
+	headerH = $header.node().offsetHeight;
+	const height = window.innerHeight - headerH;
 	$mainbar.st({ height });
 
 	const $visibleYear = $platforms.select('.year:not(.is-hidden)');
@@ -128,7 +188,10 @@ function setupFigure() {
 
 	// store $figure global
 	$figure = $party.append('figure');
-	$figure.append('div.grafs');
+	$figure
+		.append('div.grafs')
+		.on('mousemove', handleMouseMove)
+		.on('mouseleave', handleMouseLeave);
 
 	$info.append('p.party-name').text(d => d.party);
 	$info.append('p.candidate').text(d => d.candidate);
