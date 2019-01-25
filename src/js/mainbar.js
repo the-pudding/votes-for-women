@@ -59,6 +59,14 @@ function resize() {
 	updateFigure(figureH);
 }
 
+function handleNavClick() {
+	const dir = +d3.select(this).at('data-dir');
+}
+
+function setupNav() {
+	$mainbar.selectAll('.graphic__nav button').on('click', handleNavClick);
+}
+
 function setupFigure() {
 	const $year = $platforms
 		.selectAll('.year')
@@ -148,6 +156,7 @@ function loadData() {
 			issueData = cleanIssue(response[1]);
 			yearData = joinData();
 			wordTotalMax = d3.max(platformData, d => d.wordTotal);
+			setupNav();
 			setupFigure();
 			resize();
 		}
