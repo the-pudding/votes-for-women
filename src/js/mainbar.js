@@ -2,21 +2,13 @@ const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
 const $platforms = $mainbar.select('.graphic__platforms');
 
+let platformData = [];
 let yearData = [];
 let issueData = [];
 
 function resize() {
 	const height = window.innerHeight;
 	$mainbar.st({ height });
-}
-
-function cleanIssue(data) {
-	return data.map(d => ({
-		...d,
-		id: +d.id,
-		start: +d.start,
-		end: +d.end
-	}));
 }
 
 function setupFigure() {
@@ -47,15 +39,55 @@ function setupFigure() {
 		.append('p.graf');
 }
 
+function cleanPlatforms(data) {
+	return data.map(d => ({
+		...d,
+		grafTotal: +d.grafTotal,
+		grafWomen: +d.grafWomen,
+		wordTotal: +d.wordTotal,
+		wordWomen: +d.wordWomen,
+		percentWord: +d.percentWord
+	}));
+}
+
+function getPercent(datum) {
+	const { grafTotal } = platformData.find(p => p.key === datum.title);
+	return +datum.id / grafTotal;
+}
+
+function cleanIssue(data) {
+	return data.map(d => ({
+		...d,
+		id: +d.id,
+		percent: getPercent(d),
+		start: +d.start,
+		end: +d.end
+	}));
+}
+
+function joinData() {
+	const withIssues = platformData.map(d => ({
+		...d,
+		issues: issueData.filter(v => v.title === d.key)
+	}));
+
+	return d3
+		.nest()
+		.key(d => d.year)
+		.entries(withIssues);
+}
+
 function loadData() {
 	d3.loadData(
 		'assets/data/platforms.json',
 		'assets/data/issues.json',
 		(err, response) => {
 			if (err) console.log(err);
-			yearData = response[0].sort((a, b) => d3.ascending(+a.key, +b.key));
+			platformData = cleanPlatforms(response[0]);
 			issueData = cleanIssue(response[1]);
-			setupFigure();
+			yearData = joinData();
+			console.log(yearData);
+			// setupFigure();
 		}
 	);
 }
