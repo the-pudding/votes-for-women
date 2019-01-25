@@ -1,10 +1,20 @@
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
 const $platforms = $mainbar.select('.graphic__platforms');
+let $party = null;
+let $figure = null;
 
 let platformData = [];
 let yearData = [];
 let issueData = [];
+
+function updateFigure() {
+	$figure
+		.selectAll('.graf')
+		.data(d => d3.range(d.grafTotal))
+		.enter()
+		.append('p.graf');
+}
 
 function resize() {
 	const height = window.innerHeight;
@@ -21,22 +31,19 @@ function setupFigure() {
 	$year.append('h3').text(d => d.key);
 	const $parties = $year.append('div.parties');
 
-	const $party = $parties
+	// store $party global
+	$party = $parties
 		.selectAll('.party')
 		.data(d => d.values)
 		.enter()
 		.append('div.party');
 
 	const $info = $party.append('div.info');
-	const $figure = $party.append('figure');
+
+	// store $figure global
+	$figure = $party.append('figure');
 
 	$info.append('p.party-name').text(d => d.party);
-
-	$figure
-		.selectAll('.graf')
-		.data(d => d3.range(d.grafTotal))
-		.enter()
-		.append('p.graf');
 }
 
 function cleanPlatforms(data) {
@@ -86,8 +93,7 @@ function loadData() {
 			platformData = cleanPlatforms(response[0]);
 			issueData = cleanIssue(response[1]);
 			yearData = joinData();
-			console.log(yearData);
-			// setupFigure();
+			setupFigure();
 		}
 	);
 }
