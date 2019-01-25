@@ -1,3 +1,4 @@
+const $header = d3.select('header');
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
 const $platforms = $mainbar.select('.graphic__platforms');
@@ -8,17 +9,54 @@ let platformData = [];
 let yearData = [];
 let issueData = [];
 
-function updateFigure() {
-	$figure
-		.selectAll('.graf')
-		.data(d => d3.range(d.grafTotal))
-		.enter()
-		.append('p.graf');
+let wordTotalMax = 0;
+
+function updateFigure(figureH) {
+	const grafM = 1;
+	const grafH = 2;
+	const count = Math.floor(figureH / (grafH + grafM));
+
+	const $graf = $figure.selectAll('.graf').data(d => {
+		const numLines = Math.floor((d.wordTotal / wordTotalMax) * count);
+		const lines = d3.range(numLines).map(i => ({ index: i }));
+		d.issues.forEach(issue => {
+			let target = Math.floor(issue.percent * numLines);
+			let placed = false;
+			while (!placed) {
+				if (!lines[target].issue) {
+					lines[target].issue = { ...issue };
+					placed = true;
+				} else target += 1;
+
+				if (target >= lines.length) {
+					lines.push({ index: lines.length });
+				}
+			}
+		});
+
+		return lines;
+	});
+
+	const $grafEnter = $graf.enter().append('p.graf');
+
+	const $grafMerge = $grafEnter.merge($graf);
+
+	$grafMerge
+		.st('height', grafH)
+		.st('margin-bottom', grafM)
+		.classed('is-issue', d => d.issue);
+
+	$graf.exit().remove();
 }
 
 function resize() {
-	const height = window.innerHeight;
+	const height = window.innerHeight - $header.node().offsetHeight;
 	$mainbar.st({ height });
+	const yearH = $platforms.select('.year').node().offsetHeight;
+	const infoH = $platforms.select('.info').node().offsetHeight;
+	const figureH = yearH - infoH;
+	$figure.st('height', figureH);
+	updateFigure(figureH);
 }
 
 function setupFigure() {
@@ -28,7 +66,8 @@ function setupFigure() {
 		.enter()
 		.append('div.year');
 
-	$year.append('h3').text(d => d.key);
+	$year.at('data-year', d => d.key);
+	$year.append('h3.hed').text(d => d.key);
 	const $parties = $year.append('div.parties');
 
 	// store $party global
@@ -38,12 +77,27 @@ function setupFigure() {
 		.enter()
 		.append('div.party');
 
+	$party.at('data-key', d => d.key);
+
 	const $info = $party.append('div.info');
 
 	// store $figure global
 	$figure = $party.append('figure');
+	$figure.append('div.grafs');
 
 	$info.append('p.party-name').text(d => d.party);
+	$info.append('p.candidate').text(d => d.candidate);
+	$info
+		.append('p.word-total')
+		.text(d => `${d3.format(',')(d.wordTotal)} total words`);
+	$info
+		.append('p.word-women')
+		.html(
+			d =>
+				`<span>${d3.format(',')(d.wordWomen)}</span> word${
+					d.wordWomen === 1 ? '' : 's'
+				} about women`
+		);
 }
 
 function cleanPlatforms(data) {
@@ -93,14 +147,15 @@ function loadData() {
 			platformData = cleanPlatforms(response[0]);
 			issueData = cleanIssue(response[1]);
 			yearData = joinData();
+			wordTotalMax = d3.max(platformData, d => d.wordTotal);
 			setupFigure();
+			resize();
 		}
 	);
 }
 
 function init() {
 	loadData();
-	resize();
 }
 
 export default { init, resize };
