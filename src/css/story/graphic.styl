@@ -52,6 +52,12 @@
 			margin 0
 			&.is-issue
 				background-color $primary
+				opacity 0.5
+			&.is-active
+				opacity 1
+				transform scale(1,2) translateY(-25%)
+				pointer-events none
+
 
 	.info
 		transform translateY(-0.5rem)
@@ -106,9 +112,9 @@
 		pointer-events none
 		z-index set-index(overlay)
 		background $bg
-		border 2px solid $fg
+		border 2px solid $fg-lightest
 		box-shadow 0 0 8px 2px rgba($fg, 0.2)
-		transform translate(5.5rem, 0)
+		transform translate(2.75rem, 1rem)
 		&.is-visible
 			visibility visible
 		p

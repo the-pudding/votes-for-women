@@ -21,14 +21,15 @@ let offX = 0;
 function handleMouseMove() {}
 
 function handleMouseLeave() {
+	d3.select(this)
+		.selectAll('.graf')
+		.classed('is-active', false);
 	$tooltip.classed('is-visible', false);
 }
 
 function handlGrafEnter(d) {
-	const { left, top } = d3
-		.select(this)
-		.node()
-		.getBoundingClientRect();
+	const $el = d3.select(this);
+	const { left, top } = $el.node().getBoundingClientRect();
 	const max = 200;
 	if (d.issue) {
 		const { start, end, excerpt, text } = d.issue;
@@ -54,25 +55,34 @@ function handlGrafEnter(d) {
 
 		const eBefore = startClean ? '...' : '';
 		const eAfter = endClean !== text.length ? '...' : '';
-		const html = `“${eBefore}${before}<mark>${between}</mark>${after}${eAfter}”`;
-		console.log({
-			excerpt,
-			diff,
-			pad,
-			text,
-			textPad,
-			textClean,
-			start,
-			startPad,
-			startClean,
-			end,
-			endPad,
-			endClean,
-			beforeStop,
-			before,
-			between,
-			after
-		});
+
+		const qBefore = eBefore.length || before.length ? '“' : '<mark>“</mark>';
+		const qAfter = eAfter.length || after.length ? '”' : '<mark>”</mark>';
+
+		const html = `${qBefore}${eBefore}${before}<mark>${between}</mark>${after}${eAfter}${qAfter}`;
+		// console.log({
+		// 	excerpt,
+		// 	diff,
+		// 	pad,
+		// 	text,
+		// 	textPad,
+		// 	textClean,
+		// 	start,
+		// 	startPad,
+		// 	startClean,
+		// 	end,
+		// 	endPad,
+		// 	endClean,
+		// 	beforeStop,
+		// 	before,
+		// 	between,
+		// 	after
+		// });
+		$el
+			.parent()
+			.selectAll('.graf')
+			.classed('is-active', false);
+		$el.classed('is-active', true);
 		$tooltip.select('p').html(html);
 		$tooltip.st({ left, top: top - headerH }).classed('is-visible', true);
 	}
