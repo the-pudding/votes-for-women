@@ -84,7 +84,8 @@ function handlGrafEnter(d) {
 			.classed('is-active', false);
 		$el.classed('is-active', true);
 		$tooltip.select('p').html(html);
-		$tooltip.st({ left, top: top - headerH })
+		$tooltip
+			.st({ left, top: top - headerH })
 			.classed('is-visible', true)
 			.classed('is-highlight', $el.classed('is-highlight'));
 	}
@@ -146,7 +147,7 @@ function containsIssue(arr, issue) {
 }
 
 function filterBy({ party, issues, years }) {
-	// console.log(party, issues, years);
+	console.log(party, issues, years);
 	const partyVals = Object.keys(party)
 		.filter(d => party[d])
 		.map(d => d);
@@ -163,7 +164,7 @@ function filterBy({ party, issues, years }) {
 		const hasIssues = issuesVals.length
 			? !!d.issues.find(v => containsIssue(issuesVals, v.issue))
 			: true;
-		return !hasParty && !hasIssues;
+		return !hasParty || !hasIssues;
 	});
 
 	$year.classed('is-hidden', d => {
