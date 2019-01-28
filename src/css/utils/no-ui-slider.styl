@@ -329,10 +329,12 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 				display none
 		
 		.noUi-tooltip
-			background transparent
+			background $bg-darker
 			set-type-size(small)
 			color $fg
+			// border 1px solid $fg-lightest
 			border none
 			bottom auto
 			top 0
+			padding 0.25em
 			transform translate(-50%, 24px)

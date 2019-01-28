@@ -130,6 +130,11 @@ function updateFigure(figureH) {
 	$graf.exit().remove();
 }
 
+function update({ start, end }) {
+	$year.classed('is-hidden', d => +d.key < start || +d.key > end);
+	$platforms.st({ left: 0 });
+}
+
 function resize() {
 	headerH = $header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
@@ -284,4 +289,4 @@ function init() {
 	loadData();
 }
 
-export default { init, resize };
+export default { init, resize, update };

@@ -1,4 +1,5 @@
 import noUiSlider from 'nouislider';
+import Mainbar from './mainbar';
 
 const $main = d3.select('main');
 const $sidebar = $main.select('.sidebar');
@@ -9,19 +10,12 @@ const $btnFilterIssues = $sidebar.selectAll('.nav__filter-issues button');
 
 function resize() {}
 
-function handleChange() {
-	// isSliding = false;
-	console.log('change');
-}
-
 function handleSlide(value) {
-	console.log('slide', { value });
-	// isSliding = true;
-	// const [index] = value;
-	// if (+index < nestedData.length) {
-	// 	currentDay = +index;
-	// 	updateChart(true);
-	// }
+	// isSliding = false;
+	let [start, end] = value;
+	start = Math.floor(+start);
+	end = Math.floor(+end);
+	Mainbar.update({ start, end });
 }
 
 function handleSortClick() {
@@ -70,7 +64,6 @@ function setupSlider() {
 	});
 
 	slider.on('slide', handleSlide);
-	slider.on('change', handleChange);
 }
 
 function setupNav() {
