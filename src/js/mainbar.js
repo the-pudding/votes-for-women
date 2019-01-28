@@ -33,35 +33,42 @@ function handlGrafEnter(d) {
 	if (d.issue) {
 		const { start, end, excerpt, text } = d.issue;
 		const diff = end - start;
+
+		// add padding of text to before and after excerpt
 		const pad = diff < max ? Math.floor((max - diff) / 2) : 0;
 		const startPad = Math.max(0, start - pad);
 		const endPad = Math.max(text.length, end + pad);
-		const sub = text.substring(startPad, endPad);
-		// clean break
-		const startClean = startPad ? sub.indexOf(' ') : 0;
-		const endClean =
-			endPad !== text.length ? sub.lastIndexOf(' ') : text.length;
-		const clean = sub.substring(startClean, endClean);
+		const textPad = text.substring(startPad, endPad);
 
-		const before = clean.substring(0, start - startPad);
-		const between = clean.substring(start - startPad, start - startPad + diff);
-		const after = clean.substring(start - startPad + diff, clean.length);
+		// find spaces before and after excerpt to have clean break on words
+		const startClean = startPad ? textPad.indexOf(' ') : 0;
+		const endClean =
+			endPad < text.length ? textPad.lastIndexOf(' ') : text.length;
+		const textClean = textPad.substring(startClean, endClean);
+
+		const beforeStop = startPad ? pad - startClean : start;
+		const afterStart = beforeStop + diff + 1;
+		const before = textClean.substring(0, beforeStop);
+		const between = textClean.substring(beforeStop, afterStart);
+		const after = textClean.substring(afterStart, textClean.length);
 
 		const eBefore = startClean ? '...' : '';
 		const eAfter = endClean !== text.length ? '...' : '';
 		const html = `“${eBefore}${before}<mark>${between}</mark>${after}${eAfter}”`;
 		console.log({
 			excerpt,
-			endClean,
-			startClean,
-			clean,
 			diff,
 			pad,
+			text,
+			textPad,
+			textClean,
 			start,
 			startPad,
+			startClean,
 			end,
 			endPad,
-			sub,
+			endClean,
+			beforeStop,
 			before,
 			between,
 			after
