@@ -36,6 +36,8 @@
 	.party
 		margin 0 1rem
 		width 11rem
+		&.is-hidden
+			display none
 		&:first-of-type
 			margin-left 2rem
 		
@@ -52,6 +54,9 @@
 			margin 0
 			&.is-issue
 				background-color $primary
+				opacity 0.5
+			&.is-highlight
+				background-color $secondary
 				opacity 0.5
 			&.is-active
 				opacity 1
@@ -117,6 +122,9 @@
 		transform translate(2.75rem, 1rem)
 		&.is-visible
 			visibility visible
+		&.is-highlight
+			mark
+				background-color lighten($secondary, 20)
 		p
 			margin 0
 			line-height 1.25

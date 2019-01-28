@@ -8,14 +8,25 @@ const $btnSort = $sidebar.selectAll('.nav__sort button');
 const $btnFilterParty = $sidebar.selectAll('.nav__filter-party button');
 const $btnFilterIssues = $sidebar.selectAll('.nav__filter-issues button');
 
+const partyValues = {};
+const issuesValues = {};
+const yearValues = {
+	start: 1920,
+	end: 2016
+};
+
 function resize() {}
 
 function handleSlide(value) {
 	// isSliding = false;
-	let [start, end] = value;
-	start = Math.floor(+start);
-	end = Math.floor(+end);
-	Mainbar.update({ start, end });
+	const [start, end] = value;
+	yearValues.start = Math.floor(+start);
+	yearValues.end = Math.floor(+end);
+	Mainbar.filterBy({
+		party: partyValues,
+		issues: issuesValues,
+		years: yearValues
+	});
 }
 
 function handleSortClick() {
@@ -24,6 +35,7 @@ function handleSortClick() {
 	const active = $btn.classed('is-active');
 	$btnSort.classed('is-active', false);
 	$btn.classed('is-active', !active);
+	Mainbar.sortBy(value);
 }
 
 function handleFilterPartyClick() {
@@ -31,6 +43,12 @@ function handleFilterPartyClick() {
 	const value = $btn.at('data-value');
 	const active = $btn.classed('is-active');
 	$btn.classed('is-active', !active);
+	partyValues[value] = !active;
+	Mainbar.filterBy({
+		party: partyValues,
+		issues: issuesValues,
+		years: yearValues
+	});
 }
 
 function handleFilterIssuesClick() {
@@ -38,6 +56,12 @@ function handleFilterIssuesClick() {
 	const value = $btn.at('data-value');
 	const active = $btn.classed('is-active');
 	$btn.classed('is-active', !active);
+	issuesValues[value.toLowerCase()] = !active;
+	Mainbar.filterBy({
+		party: partyValues,
+		issues: issuesValues,
+		years: yearValues
+	});
 }
 
 function setupSlider() {

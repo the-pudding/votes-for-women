@@ -84,7 +84,9 @@ function handlGrafEnter(d) {
 			.classed('is-active', false);
 		$el.classed('is-active', true);
 		$tooltip.select('p').html(html);
-		$tooltip.st({ left, top: top - headerH }).classed('is-visible', true);
+		$tooltip.st({ left, top: top - headerH })
+			.classed('is-visible', true)
+			.classed('is-highlight', $el.classed('is-highlight'));
 	}
 }
 
@@ -130,8 +132,63 @@ function updateFigure(figureH) {
 	$graf.exit().remove();
 }
 
-function update({ start, end }) {
-	$year.classed('is-hidden', d => +d.key < start || +d.key > end);
+function sortBy(value) {
+	if (value === 'Percent women')
+		$year.sort((a, b) => d3.descending(a.wordWomen, b.wordWomen));
+	else $year.sort((a, b) => d3.ascending(a.year, b.year));
+	$platforms.st({ left: 0 });
+}
+
+function containsIssue(arr, issue) {
+	if (!arr.length) return false;
+	if (!issue) return false;
+	return !!issue.find(i => arr.includes(i));
+}
+
+function filterBy({ party, issues, years }) {
+	// console.log(party, issues, years);
+	const partyVals = Object.keys(party)
+		.filter(d => party[d])
+		.map(d => d);
+
+	const issuesVals = Object.keys(issues)
+		.filter(d => issues[d])
+		.map(d => d);
+
+	$year.classed('is-hidden', false);
+	$party.classed('is-hidden', false);
+
+	$party.classed('is-hidden', d => {
+		const hasParty = partyVals.length ? !!partyVals.includes(d.party) : true;
+		const hasIssues = issuesVals.length
+			? !!d.issues.find(v => containsIssue(issuesVals, v.issue))
+			: true;
+		return !hasParty && !hasIssues;
+	});
+
+	$year.classed('is-hidden', d => {
+		const hasYear = d.year >= years.start && d.year <= years.end;
+
+		const hasParty = partyVals.length
+			? !!d.values.find(v => partyVals.includes(v.party))
+			: true;
+
+		const hasIssues = issuesVals.length
+			? !!d.values.find(
+				v => !!v.issues.find(i => containsIssue(issuesVals, i.issue))
+			  )
+			: true;
+		return !hasParty || !hasIssues || !hasYear;
+	});
+
+	$year
+		.selectAll('.party:not(.is-hidden)')
+		.selectAll('.graf')
+		.classed('is-highlight', d => {
+			if (d.issue) return containsIssue(issuesVals, d.issue.issue);
+			return false;
+		});
+
 	$platforms.st({ left: 0 });
 }
 
@@ -192,7 +249,7 @@ function setupFigure() {
 		.enter()
 		.append('div.year');
 
-	$year.at('data-year', d => d.key).classed('is-hidden', d => +d.key < 1920);
+	$year.at('data-year', d => d.key).classed('is-hidden', d => d.year < 1920);
 
 	$year.append('h3.hed').text(d => d.key);
 	const $parties = $year.append('div.parties');
@@ -252,7 +309,8 @@ function cleanIssue(data) {
 		id: +d.id,
 		percent: getPercent(d),
 		start: +d.start,
-		end: +d.end
+		end: +d.end,
+		issue: d.issue.split('|').map(v => v.trim())
 	}));
 }
 
@@ -262,10 +320,16 @@ function joinData() {
 		issues: issueData.filter(v => v.title === d.key)
 	}));
 
-	return d3
+	const joined = d3
 		.nest()
 		.key(d => d.year)
 		.entries(withIssues);
+
+	return joined.map(d => ({
+		...d,
+		year: +d.key,
+		wordWomen: d3.mean(d.values, v => v.percentWord)
+	}));
 }
 
 function loadData() {
@@ -289,4 +353,4 @@ function init() {
 	loadData();
 }
 
-export default { init, resize, update };
+export default { init, resize, sortBy, filterBy };
