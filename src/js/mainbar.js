@@ -147,7 +147,6 @@ function containsIssue(arr, issue) {
 }
 
 function filterBy({ party, issues, years }) {
-	console.log(party, issues, years);
 	const partyVals = Object.keys(party)
 		.filter(d => party[d])
 		.map(d => d);
@@ -191,6 +190,14 @@ function filterBy({ party, issues, years }) {
 		});
 
 	$platforms.st({ left: 0 });
+}
+
+function toggle(section) {
+	const $section = $mainbar.select(`.section__${section}`);
+	const hidden = $section.classed('is-hidden');
+	$section
+		.on('click', () => $section.classed('is-hidden', true))
+		.classed('is-hidden', !hidden);
 }
 
 function resize() {
@@ -305,14 +312,16 @@ function getPercent(datum) {
 }
 
 function cleanIssue(data) {
-	return data.map(d => ({
-		...d,
-		id: +d.id,
-		percent: getPercent(d),
-		start: +d.start,
-		end: +d.end,
-		issue: d.issue.split('|').map(v => v.trim())
-	}));
+	return data
+		.map(d => ({
+			...d,
+			id: +d.id,
+			percent: getPercent(d),
+			start: +d.start,
+			end: +d.end,
+			issue: d.issue.split('|').map(v => v.trim())
+		}))
+		.filter(d => d.excerpt.length > 30);
 }
 
 function joinData() {
@@ -354,4 +363,4 @@ function init() {
 	loadData();
 }
 
-export default { init, resize, sortBy, filterBy };
+export default { init, resize, sortBy, filterBy, toggle };

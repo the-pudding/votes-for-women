@@ -1,1 +1,21 @@
-<section class='section__about is-hidden'></section>
+<section class='section__about is-hidden'>
+	<div class='about__content'>
+		{{!-- <p><strong>Data and Method</strong></p> --}}
+		<p>{{{doc.aboutMethod}}}</p>
+		<p>{{{doc.aboutExhibit}}}</p>
+	</div>
+	<div class='about__exhibit'>
+		<img src='https://placehold.it/640x480.jpg' alt='Votes for Women'>
+		<div class='exhibit__content'>
+			<p class='exhibit__title'>{{{doc.exhibitTitle}}}</p>
+			<p class='exhibit__date'>{{{doc.exhibitDate}}}</p>
+			<p class='exhibit__text'>{{{doc.exhibitText}}}</p>
+		</div>
+	</div>
+	<div class='about__collab'>
+		<p>A collaboration between</p>
+		<p>@@include('npg-logo.svg')</p>
+		<p>@@include('pudding-logo.svg')</p>
+	</div>
+	<button class='about__close'>@@include('x-circle.svg')</button>
+</section>

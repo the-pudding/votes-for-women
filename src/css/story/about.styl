@@ -1,0 +1,44 @@
+.section__about
+	cursor pointer
+	background-color rgba($bg, 0.95)
+	z-index set-index(overlay)
+	display flex
+	flex-direction column
+	justify-content center
+
+	.about__content, .about__exhibit, .about__collab
+		margin 0 auto
+		max-width $column-width
+		width 90%
+		border-top 2px solid $fg-lightest
+		margin-bottom 2rem
+
+	.about__exhibit
+		display flex
+		align-items center
+		padding-top 1rem
+		& > * 
+			&:first-child
+				margin-right 1rem
+				width 40%
+			&:last-child
+				width 60%
+				margin-left 1rem
+
+		.exhibit__title
+			font-weight 700
+	
+	.about__collab
+		display flex
+		align-items center
+		justify-content space-between
+		padding-top 1rem
+		svg
+			height 5rem
+		
+
+	.about__close
+		border none
+		position absolute
+		top 0.25em
+		right 0.25em

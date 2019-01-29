@@ -32,9 +32,8 @@ function handleSlide(value) {
 function handleSortClick() {
 	const $btn = d3.select(this);
 	const value = $btn.at('data-value');
-	const active = $btn.classed('is-active');
 	$btnSort.classed('is-active', false);
-	$btn.classed('is-active', !active);
+	$btn.classed('is-active', true);
 	Mainbar.sortBy(value);
 }
 
