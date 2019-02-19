@@ -14,10 +14,17 @@ function init() {
 	Mainbar.init();
 
 	const $about = $header.select('.header__about');
-	$about.on('click', () => Mainbar.toggle('about'));
-
 	const $textVideo = $body.select('.text__video button');
-	$textVideo.on('click', () => Mainbar.toggle('video'));
+
+	$about.on('click', function() {
+		Mainbar.toggle('about')
+		d3.select('.section__video').classed('is-hidden', true)
+	})
+	
+	$textVideo.on('click', function() {
+		Mainbar.toggle('video')
+		d3.select('.section__about').classed('is-hidden', true)
+	})
 }
 
 export default { init, resize };
