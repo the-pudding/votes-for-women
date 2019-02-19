@@ -1,5 +1,5 @@
 .section__graphic
-	user-select none	
+	user-select none
 	.graphic__platforms
 		position absolute
 		top 0
@@ -40,14 +40,14 @@
 			display none
 		&:first-of-type
 			margin-left 2rem
-		
+
 		.grafs
 			display flex
 			flex-wrap wrap
 			flex-direction clumn
 			align-items flex-start
 			cursor crosshair
-			
+
 		.graf
 			width 100%
 			background $bg-darker
@@ -81,6 +81,20 @@
 			set-type-size(large)
 			font-weight 700
 			color $fg
+			display flex
+
+		.doc-link
+			border-bottom none
+
+		.doc-link a
+			border-bottom none
+
+			svg
+				width 1rem
+				margin 0.15rem 0 0 0.25rem
+				&:hover
+					stroke $fg
+
 
 	.graphic__nav
 		position absolute
@@ -106,7 +120,7 @@
 			vertical-align middle
 			width 1rem
 			transform translateY(-2.5%)
-		
+
 	.tooltip
 		position absolute
 		top 50%

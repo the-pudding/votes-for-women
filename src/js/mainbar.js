@@ -6,6 +6,8 @@ const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
 
+const linkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#61507b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
+
 let $year = null;
 let $party = null;
 let $figure = null;
@@ -281,6 +283,9 @@ function setupFigure() {
 		.on('mouseleave', handleMouseLeave);
 
 	$info.append('p.party-name').text(d => d.party);
+	d3.selectAll('.party-name').append('span.doc-link').html(function(d) {
+		return `<a href='${d.link}' target='blank'>${linkSVG}</a>`
+	})
 	$info.append('p.candidate').text(d => d.candidate);
 	$info
 		.append('p.word-total')
