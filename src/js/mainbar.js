@@ -6,6 +6,8 @@ const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
 
+const REM = 16
+const TOOLTIP_WIDTH = $tooltip.node().offsetWidth + REM
 const linkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#61507b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
 
 let $year = null;
@@ -19,6 +21,7 @@ let issueData = [];
 let headerH = 0;
 let wordTotalMax = 0;
 let offX = 0;
+let mainWidth = 0;
 
 function handleMouseMove() {}
 
@@ -34,7 +37,7 @@ function handlGrafEnter(d) {
 	const { left, top } = $el.node().getBoundingClientRect();
 	const max = 200;
 	if (d.issue) {
-		const { start, end, excerpt, text } = d.issue;
+		const { start, end, text } = d.issue;
 		const diff = end - start;
 
 		// add padding of text to before and after excerpt
@@ -62,24 +65,11 @@ function handlGrafEnter(d) {
 		const qAfter = eAfter.length || after.length ? '”' : '<mark>”</mark>';
 
 		const html = `${qBefore}${eBefore}${before}<mark>${between}</mark>${after}${eAfter}${qAfter}`;
-		// console.log({
-		// 	excerpt,
-		// 	diff,
-		// 	pad,
-		// 	text,
-		// 	textPad,
-		// 	textClean,
-		// 	start,
-		// 	startPad,
-		// 	startClean,
-		// 	end,
-		// 	endPad,
-		// 	endClean,
-		// 	beforeStop,
-		// 	before,
-		// 	between,
-		// 	after
-		// });
+
+		const delta = (left + TOOLTIP_WIDTH) - mainWidth
+		const offset =  delta > -REM ? delta + REM : 0;
+		const x = left - offset;
+
 		$el
 			.parent()
 			.selectAll('.graf')
@@ -87,7 +77,7 @@ function handlGrafEnter(d) {
 		$el.classed('is-active', true);
 		$tooltip.select('p').html(html);
 		$tooltip
-			.st({ left, top: top - headerH })
+			.st({ left: x, top: top - headerH })
 			.classed('is-visible', true)
 			.classed('is-highlight', $el.classed('is-highlight'));
 	}
@@ -203,6 +193,7 @@ function toggle(section) {
 }
 
 function resize() {
+	mainWidth = $main.node().offsetWidth
 	headerH = $header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
 	$mainbar.st({ height });
