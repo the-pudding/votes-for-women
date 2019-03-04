@@ -6,6 +6,11 @@
 	flex-direction column
 	justify-content center
 
+	a
+		&:hover
+			color $fg-lighter
+			border-bottom 1px solid $fg-lighter
+
 	.about__content, .about__exhibit, .about__collab
 		margin 0 auto
 		max-width $column-width
@@ -17,7 +22,7 @@
 		display flex
 		align-items center
 		padding-top 1rem
-		& > * 
+		& > *
 			&:first-child
 				margin-right 1rem
 				width 40%
@@ -27,7 +32,7 @@
 
 		.exhibit__title
 			font-weight 700
-	
+
 	.about__collab
 		display flex
 		align-items center
@@ -35,7 +40,7 @@
 		padding-top 1rem
 		svg
 			height 5rem
-		
+
 
 	.about__close
 		border none
