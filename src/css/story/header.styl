@@ -7,10 +7,12 @@ header
 	background-color $white
 
 	a.logo
-		display block
+		display none
 		border none
 		max-width 9rem
 		margin 1rem auto
+		+mq('bp-m')
+			display block
 
 		svg
 			fill $off-black
@@ -73,7 +75,20 @@ header.is-sticky
 			stroke $off-black
 		
 		span
+			display none
+			+mq('bp-m')
+				display block
+		
+		a
 			display block
+			max-width 1.25rem
+			transform translateY(-7.5%)
+			svg 
+				stroke none
+				
+			+mq('bp-m')
+				display none
+			
 
 	.header__menu
 		position fixed
@@ -158,3 +173,18 @@ header.is-sticky.is-dark
 		&:hover
 			background-color rgba($off-black, 0.75)
 			color $off-white
+
+
+.header__switcher
+	display flex
+	justify-content center
+	margin 0 auto
+	button
+		margin 0 0.25em
+		border none
+		border-bottom 1px solid $fg
+		line-height 1
+		padding 0
+		opacity 0.5
+		&.is-active
+			opacity 1

@@ -6,6 +6,7 @@ const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
 
+const BP = 768
 const REM = 16
 const TOOLTIP_WIDTH = $tooltip.node().offsetWidth + REM
 const linkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#61507b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
@@ -206,7 +207,7 @@ function resize() {
 	$figure.st('height', figureH);
 
 	const yearMargin = +$visibleYear.st('margin-left').replace('px', '');
-	offX = $sidebar.node().offsetWidth + yearMargin;
+	offX = mainWidth < BP ? 0 : $sidebar.node().offsetWidth + yearMargin;
 	updateFigure(figureH);
 }
 
@@ -220,10 +221,12 @@ function getNextPos(dir) {
 		const offRight = left + width;
 		output.push({ i, left, offLeft, offRight });
 	});
+
 	// forward
 	if (dir === 1) {
 		output.reverse();
 		const { left } = output.find(d => d.offLeft < 0);
+		console.log(left)
 		return -left;
 	}
 	// back

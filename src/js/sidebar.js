@@ -2,11 +2,14 @@ import noUiSlider from 'nouislider';
 import Mainbar from './mainbar';
 
 const $main = d3.select('main');
+const $mainbar = $main.select('.mainbar');
 const $sidebar = $main.select('.sidebar');
 const $slider = $main.select('.slider');
 const $btnSort = $sidebar.selectAll('.nav__sort button');
 const $btnFilterParty = $sidebar.selectAll('.nav__filter-party button');
 const $btnFilterIssues = $sidebar.selectAll('.nav__filter-issues button');
+const $btnToggle = $main.select('.sidebar__toggle');
+const $switcherButton = d3.selectAll('.header__switcher button');
 
 const partyValues = {};
 const issuesValues = {};
@@ -16,6 +19,33 @@ const yearValues = {
 };
 
 function resize() {}
+
+function handleToggleClick() {
+	const hidden = $sidebar.classed('is-hidden');
+	$sidebar.classed('is-hidden', !hidden);
+	$btnToggle.classed('is-hidden', !hidden);
+	$mainbar.classed('is-visible', !hidden);
+
+	d3.select(this)
+		.selectAll('span')
+		.classed('is-visible', (d, i, n) => {
+			const $span = d3.select(n[i]);
+			const visible = $span.classed('is-visible');
+			return !visible;
+		});
+
+	$switcherButton.classed('is-active', (d, i, n) => {
+		const $btn = d3.select(n[i]);
+		const active = $btn.classed('is-active');
+		return !active;
+	});
+}
+
+function handleSwitcherClick() {
+	const $btn = d3.select(this);
+	const active = $btn.classed('is-active');
+	if (!active) handleToggleClick.call($btnToggle.node());
+}
 
 function handleSlide(value) {
 	// isSliding = false;
@@ -93,6 +123,8 @@ function setupNav() {
 	$btnSort.on('click', handleSortClick).classed('is-active', (d, i) => i === 0);
 	$btnFilterParty.on('click', handleFilterPartyClick);
 	$btnFilterIssues.on('click', handleFilterIssuesClick);
+	$btnToggle.on('click', handleToggleClick);
+	$switcherButton.on('click', handleSwitcherClick);
 }
 
 function init() {

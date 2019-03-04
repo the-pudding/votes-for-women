@@ -41,6 +41,8 @@
 		
 	</nav>
 
+	<button class='btn--about'>About this project</button>
+	
 	<p class='sidebar__credit'>
 		By <a href='{{meta.author.url}}' target='_blank'>
 			<strong>{{meta.author.name}}</strong>
@@ -49,3 +51,8 @@
 		</a> in collaboration with the <a href='' target='_blank'>National Portrait Gallery</a>.
 	</p>
 </div>
+
+<button class='sidebar__toggle'>
+	<span class='is-visible'>@@include('chevrons-left.svg')</span>
+	<span>@@include('chevrons-right.svg')</span>
+</button>

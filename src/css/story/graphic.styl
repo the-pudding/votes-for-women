@@ -4,10 +4,11 @@
 		position absolute
 		top 0
 		left 0
-		margin-left $sidebar-width
 		display flex
 		height 100%
 		transition left 0.5s ease-in-out
+		+mq('bp-m')
+			margin-left $sidebar-width
 
 	.year
 		position relative
@@ -103,10 +104,12 @@
 		width 100%
 		height 3rem
 		display flex
-		justify-content flex-end
 		padding-right 1rem
 		padding-bottom 1rem
 		z-index set-index(overlay)
+		justify-content center
+		+mq('bp-m')
+			justify-content flex-end
 		button
 			padding 0
 			line-height 1
