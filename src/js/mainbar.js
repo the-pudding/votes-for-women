@@ -102,7 +102,7 @@ function updateFigure(figureH) {
 		.select('.grafs')
 		.selectAll('.graf')
 		.data(d => {
-			const numLines = Math.floor((d.wordTotal / wordTotalMax) * count);
+			const numLines = Math.max(1, Math.floor((d.wordTotal / wordTotalMax) * count));
 			const lines = d3.range(numLines).map(i => ({ index: i }));
 			d.issues.forEach(issue => {
 				let target = Math.floor(issue.percent * numLines);
