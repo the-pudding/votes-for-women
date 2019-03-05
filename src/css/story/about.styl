@@ -15,8 +15,9 @@
 		margin 0 auto
 		max-width $column-width
 		width 90%
-		border-top 2px solid $fg-lightest
 		margin-bottom 2rem
+		+mq('bp-m')
+			border-top 2px solid $fg-lightest
 
 	.about__exhibit
 		display flex
@@ -34,10 +35,12 @@
 			font-weight 700
 
 	.about__collab
-		display flex
+		display none
 		align-items center
 		justify-content space-between
 		padding-top 1rem
+		+mq('bp-m')
+			display flex
 		svg
 			height 5rem
 

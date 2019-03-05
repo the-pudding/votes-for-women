@@ -6,15 +6,17 @@
 	max-width $sidebar-width
 	box-shadow 0 2px 7px 1px rgba($fg, 0.25)
 	transition transform 500ms ease-in-out
-	&.is-hidden
-		transform translate($sidebar-width * -1, 0)
+	
 	+mq('bp-m')
 		overflow hidden
-
 		&.is-hidden
 			transform translate(0, 0)
+
+	&.is-hidden
+		transform translate($sidebar-width * -1, 0)
+
 	
-  .btn--about
+	.btn--about
 		display block
 		set-type-size(medium, true)
 		border none
@@ -32,6 +34,7 @@
 				stroke $fg
 				width 1.5rem
 				transform translateY(20%)
+		
 		+mq('bp-m')
 			display none
 

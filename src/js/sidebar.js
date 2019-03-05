@@ -47,6 +47,10 @@ function handleSwitcherClick() {
 	if (!active) handleToggleClick.call($btnToggle.node());
 }
 
+function hide() {
+	handleToggleClick.call($btnToggle.node());
+}
+
 function handleSlide(value) {
 	// isSliding = false;
 	const [start, end] = value;
@@ -132,4 +136,4 @@ function init() {
 	setupNav();
 }
 
-export default { init, resize };
+export default { init, resize, hide };
