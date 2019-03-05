@@ -71,16 +71,18 @@
 			width 100%
 			background $bg-darker
 			margin 0
+			&.is-active
+				opacity 1
+				background-color darken($bg-darker, 5)
 			&.is-issue
 				background-color $primary
 				opacity 0.5
+				&.is-active
+					opacity 1
+					transform scale(1,1.5) translateY(0%)
 			&.is-highlight
 				background-color $secondary
 				opacity 0.5
-			&.is-active
-				opacity 1
-				transform scale(1,2) translateY(-25%)
-				pointer-events none
 
 
 	.info

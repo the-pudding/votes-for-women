@@ -6,6 +6,8 @@ const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
 
+const GRAF_M = 1;
+const GRAF_H = 3;
 const BP = 768;
 const BPD = 1048;
 const REM = 16;
@@ -27,7 +29,18 @@ let offX = 0;
 let mainWidth = 0;
 let mobileSlide = false;
 
-function handleMouseMove() {}
+function handleMouseMove() {
+	const [x, y] = d3.mouse(this);
+	const $grafs = d3.select(this);
+	const $graf = $grafs.selectAll('.graf');
+	const count = $graf.size() - 1;
+	const index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
+	$graf
+		.filter((d, i) => i === index)
+		.each((d, i, n) => {
+			handleGrafEnter.call(n[i], d);
+		});
+}
 
 function handleMouseLeave() {
 	d3.select(this)
@@ -36,11 +49,18 @@ function handleMouseLeave() {
 	$tooltip.classed('is-visible', false);
 }
 
-function handlGrafEnter(d) {
+function handleGrafEnter(d) {
 	const $el = d3.select(this);
 	const { left, top } = $el.node().getBoundingClientRect();
 	const max = 200;
+	$el
+		.parent()
+		.selectAll('.graf')
+		.classed('is-active', false);
+	$el.classed('is-active', true);
+
 	if (d.issue) {
+		// d3.selectAll('.graf').classed('is-disable', v => v.index === d.index);
 		const { start, end, text } = d.issue;
 		const diff = end - start;
 
@@ -74,23 +94,18 @@ function handlGrafEnter(d) {
 		const offset = delta > -REM ? delta + REM : 0;
 		const x = left - offset;
 
-		$el
-			.parent()
-			.selectAll('.graf')
-			.classed('is-active', false);
-		$el.classed('is-active', true);
 		$tooltip.select('p').html(html);
 		$tooltip
 			.st({ left: x, top: top - headerH })
 			.classed('is-visible', true)
 			.classed('is-highlight', $el.classed('is-highlight'));
+	} else {
+		$tooltip.classed('is-visible', false);
 	}
 }
 
 function updateFigure(figureH) {
-	const grafM = 1;
-	const grafH = 3;
-	const count = Math.floor(figureH / grafH);
+	const count = Math.floor(figureH / GRAF_H);
 
 	const $graf = $figure
 		.select('.grafs')
@@ -121,13 +136,13 @@ function updateFigure(figureH) {
 
 	const $grafEnter = $graf.enter().append('p.graf');
 
-	const $grafMerge = $grafEnter.merge($graf);
+	const $GRAF_Merge = $grafEnter.merge($graf);
 
-	$grafMerge
-		.st('height', grafH)
-		.st('border-bottom', `${grafM}px solid #fff`)
-		.classed('is-issue', d => d.issue)
-		.on('mouseenter', handlGrafEnter);
+	$GRAF_Merge
+		.st('height', GRAF_H)
+		.st('margin-bottom', GRAF_M)
+		// .st('border-bottom', `${GRAF_M}px solid #fff`)
+		.classed('is-issue', d => d.issue);
 
 	$graf.exit().remove();
 }
@@ -292,7 +307,7 @@ function setupFigure() {
 	$figure = $party.append('figure');
 	$figure
 		.append('div.grafs')
-		.on('mousemove', handleMouseMove)
+		.on('mousemove touchend', handleMouseMove)
 		.on('mouseleave', handleMouseLeave);
 
 	$info.append('p.party-year').text(d => d.year);
