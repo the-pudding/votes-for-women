@@ -108,7 +108,17 @@ function handleMouseMove() {
 	const $grafs = d3.select(this);
 	const $graf = $grafs.selectAll('.graf');
 	const count = $graf.size() - 1;
-	const index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
+	let index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
+	if (mobile) {
+		// find nearest
+		const issues = $graf.data().filter(d => d.issue);
+		if (issues.length) {
+			issues.sort((a, b) =>
+				d3.ascending(Math.abs(a.index - index), Math.abs(b.index - index))
+			);
+			index = issues[0].index;
+		}
+	}
 	$graf
 		.filter((d, i) => i === index)
 		.each((d, i, n) => {
