@@ -12,6 +12,7 @@
 		overflow hidden
 
 	.btn--about
+		display block
 		set-type-size(medium, true)
 		border none
 		text-align left
@@ -28,6 +29,8 @@
 				stroke $fg
 				width 1.5rem
 				transform translateY(20%)
+		+mq('bp-m')
+			display none
 
 	ul
 		display flex
@@ -119,6 +122,8 @@
 			&:hover
 				color $fg-lighter
 				border-bottom 1px solid $fg-lighter
+		+mq('bp-m')
+			margin-top 4rem
 
 // &:after
 // 		position absolute
