@@ -18,3 +18,21 @@
 		right 0.25em
 		&:hover
 			background transparent
+
+	p
+		color $fg
+		set-type-size(small, true)
+		margin 1rem 0 0 0
+		&:hover
+			a
+				color $fg-lighter
+			svg
+				stroke $fg-lighter	
+		a
+			border-bottom 0
+			svg
+				width 1.25rem
+				stroke $fg
+				vertical-align middle
+				margin-left 0.125rem
+				transform translateY(-8%)

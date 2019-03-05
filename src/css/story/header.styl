@@ -18,7 +18,7 @@ header
 			fill $off-black
 			display block
 			width 100%
-	
+
 header.is-sticky
 	position fixed
 	transform translate3d(0,0,0)
@@ -27,10 +27,10 @@ header.is-sticky
 	height 3rem
 	display flex
 	align-items center
-	
+
 	a.logo
 		margin 0 auto
-	
+
 	.header__toggle
 		position fixed
 		transform translate3d(0,0,0)
@@ -40,17 +40,17 @@ header.is-sticky
 		cursor pointer
 		line-height 1
 		z-index set-index(overlay)
-		border none 
+		border none
 		background-color transparent
 		svg
 			stroke $off-black
-		
+
 		span
 			&:first-of-type
 				display block
 			&:last-of-type
 				display none
-		
+
 		&.is-visible span
 			&:first-of-type
 				display none
@@ -59,7 +59,7 @@ header.is-sticky
 
 			svg
 				stroke $off-white
-		
+
 	.header__about
 		position fixed
 		transform translate3d(0,0,0)
@@ -69,26 +69,26 @@ header.is-sticky
 		cursor pointer
 		line-height 1
 		z-index set-index(overlay)
-		border none 
+		border none
 		background-color transparent
 		svg
 			stroke $off-black
-		
+
 		span
 			display none
 			+mq('bp-m')
 				display block
-		
+
 		a
 			display block
 			max-width 1.25rem
 			transform translateY(-7.5%)
-			svg 
+			svg
 				stroke none
-				
+
 			+mq('bp-m')
 				display none
-			
+
 
 	.header__menu
 		position fixed
@@ -161,12 +161,12 @@ header.is-sticky.is-dark
 	.header__toggle
 		svg
 			stroke $off-white
-		
+
 		&.is-visible span
 			svg
 				stroke $off-black
-				
-	
+
+
 	.menu__patreon a
 		color $off-white
 		background-color $off-black
@@ -182,11 +182,19 @@ header.is-sticky.is-dark
 	+mq('bp-m')
 		display none
 	button
+		width 3.5rem
 		margin 0 0.25em
 		border none
-		border-bottom 1px solid $fg
+		border-bottom 1px solid $fg-lightest
 		line-height 1
 		padding 0
-		opacity 0.5
+		color $fg-lightest
+		&:hover
+			background-color transparent
+			border-bottom 2px solid $fg-lightest
+			font-weight 600
 		&.is-active
 			opacity 1
+			background-color transparent
+			color $fg
+			border-bottom 2px solid $fg
