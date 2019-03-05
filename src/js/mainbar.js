@@ -6,10 +6,12 @@ const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
 
-const BP = 768
-const REM = 16
-const TOOLTIP_WIDTH = $tooltip.node().offsetWidth + REM
-const linkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#61507b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
+const BP = 768;
+const BPD = 1048;
+const REM = 16;
+const TOOLTIP_WIDTH = $tooltip.node().offsetWidth + REM;
+const linkSVG =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#61507b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
 
 let $year = null;
 let $party = null;
@@ -23,6 +25,7 @@ let headerH = 0;
 let wordTotalMax = 0;
 let offX = 0;
 let mainWidth = 0;
+let mobileSlide = false;
 
 function handleMouseMove() {}
 
@@ -67,8 +70,8 @@ function handlGrafEnter(d) {
 
 		const html = `${qBefore}${eBefore}${before}<mark>${between}</mark>${after}${eAfter}${qAfter}`;
 
-		const delta = (left + TOOLTIP_WIDTH) - mainWidth
-		const offset =  delta > -REM ? delta + REM : 0;
+		const delta = left + TOOLTIP_WIDTH - mainWidth;
+		const offset = delta > -REM ? delta + REM : 0;
 		const x = left - offset;
 
 		$el
@@ -93,7 +96,10 @@ function updateFigure(figureH) {
 		.select('.grafs')
 		.selectAll('.graf')
 		.data(d => {
-			const numLines = Math.max(1, Math.floor((d.wordTotal / wordTotalMax) * count));
+			const numLines = Math.max(
+				1,
+				Math.floor((d.wordTotal / wordTotalMax) * count)
+			);
 			const lines = d3.range(numLines).map(i => ({ index: i }));
 			d.issues.forEach(issue => {
 				let target = Math.floor(issue.percent * numLines);
@@ -194,10 +200,12 @@ function toggle(section) {
 }
 
 function resize() {
-	mainWidth = $main.node().offsetWidth
+	mainWidth = $main.node().offsetWidth;
 	headerH = $header.node().offsetHeight;
 	const height = window.innerHeight - headerH;
 	$mainbar.st({ height });
+
+	mobileSlide = mainWidth < BPD;
 
 	const $visibleYear = $platforms.select('.year:not(.is-hidden)');
 
@@ -211,9 +219,23 @@ function resize() {
 	updateFigure(figureH);
 }
 
-function getNextPos(dir) {
+function getNextPos({ dir, x }) {
+	// mobile
+	if (mobileSlide) {
+		const $p = $platforms.select('.year:not(.is-hidden) .party');
+		const partyW = $p.node().offsetWidth + REM * 2;
+		let count = $platforms.selectAll('.year:not(.is-hidden) .party').size();
+		count -= offX ? 0 : 2;
+
+		if (dir === -1 && x >= 0) return 0;
+		if (dir === 1 && x < offX + count * partyW * -1) return 0;
+		return partyW * dir * -1;
+	}
+
+	// desktop
 	const width = $graphic.node().offsetWidth - offX;
 	const output = [];
+
 	$platforms.selectAll('.year:not(.is-hidden)').each((d, i, n) => {
 		let { left } = n[i].getBoundingClientRect();
 		left -= offX;
@@ -221,12 +243,9 @@ function getNextPos(dir) {
 		const offRight = left + width;
 		output.push({ i, left, offLeft, offRight });
 	});
-
-	// forward
 	if (dir === 1) {
 		output.reverse();
-		const { left } = output.find(d => d.offLeft < 0);
-		console.log(left)
+		const { left } = output.filter(d => d.left > 0).pop();
 		return -left;
 	}
 	// back
@@ -237,7 +256,7 @@ function getNextPos(dir) {
 function handleNavClick() {
 	const dir = +d3.select(this).at('data-dir');
 	const x = +$platforms.st('left').replace('px', '');
-	const nextPos = getNextPos(dir);
+	const nextPos = getNextPos({ dir, x });
 	const left = x + nextPos;
 	$platforms.st({ left });
 }
@@ -276,10 +295,11 @@ function setupFigure() {
 		.on('mousemove', handleMouseMove)
 		.on('mouseleave', handleMouseLeave);
 
+	$info.append('p.party-year').text(d => d.year);
 	$info.append('p.party-name').text(d => d.party);
-	d3.selectAll('.party-name').append('span.doc-link').html(function(d) {
-		return `<a href='${d.link}' target='blank'>${linkSVG}</a>`
-	})
+	d3.selectAll('.party-name')
+		.append('span.doc-link')
+		.html(d => `<a href='${d.link}' target='blank'>${linkSVG}</a>`);
 	$info.append('p.candidate').text(d => d.candidate);
 	$info
 		.append('p.word-total')
