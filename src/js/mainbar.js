@@ -5,6 +5,7 @@ const $sidebar = $main.select('.sidebar');
 const $graphic = $mainbar.select('.section__graphic');
 const $platforms = $graphic.select('.graphic__platforms');
 const $tooltip = $graphic.select('.tooltip');
+const $sidebarToggle = $main.select('.sidebar__toggle');
 
 const GRAF_M = 1;
 const GRAF_H = 3;
@@ -28,25 +29,14 @@ let wordTotalMax = 0;
 let offX = 0;
 let mainWidth = 0;
 let mobileSlide = false;
-
-function handleMouseMove() {
-	const [x, y] = d3.mouse(this);
-	const $grafs = d3.select(this);
-	const $graf = $grafs.selectAll('.graf');
-	const count = $graf.size() - 1;
-	const index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
-	$graf
-		.filter((d, i) => i === index)
-		.each((d, i, n) => {
-			handleGrafEnter.call(n[i], d);
-		});
-}
+let mobile = false;
 
 function handleMouseLeave() {
 	d3.select(this)
 		.selectAll('.graf')
 		.classed('is-active', false);
 	$tooltip.classed('is-visible', false);
+	// $sidebarToggle.classed('is-bottom', false);
 }
 
 function handleGrafEnter(d) {
@@ -95,13 +85,35 @@ function handleGrafEnter(d) {
 		const x = left - offset;
 
 		$tooltip.select('p').html(html);
+		if (!mobile) $tooltip.st({ left: x, top: top - headerH });
 		$tooltip
-			.st({ left: x, top: top - headerH })
 			.classed('is-visible', true)
 			.classed('is-highlight', $el.classed('is-highlight'));
+
+		if (mobile) {
+			$sidebarToggle.classed('is-bottom', true);
+			$graphic.classed('is-disable', true);
+		}
 	} else {
 		$tooltip.classed('is-visible', false);
+		if (mobile) {
+			$sidebarToggle.classed('is-bottom', false);
+			$graphic.classed('is-disable', false);
+		}
 	}
+}
+
+function handleMouseMove() {
+	const [x, y] = d3.mouse(this);
+	const $grafs = d3.select(this);
+	const $graf = $grafs.selectAll('.graf');
+	const count = $graf.size() - 1;
+	const index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
+	$graf
+		.filter((d, i) => i === index)
+		.each((d, i, n) => {
+			handleGrafEnter.call(n[i], d);
+		});
 }
 
 function updateFigure(figureH) {
@@ -221,6 +233,7 @@ function resize() {
 	$mainbar.st({ height });
 
 	mobileSlide = mainWidth < BPD;
+	mobile = mainWidth < BP;
 
 	const $visibleYear = $platforms.select('.year:not(.is-hidden)');
 
@@ -278,6 +291,11 @@ function handleNavClick() {
 
 function setupNav() {
 	$mainbar.selectAll('.graphic__nav button').on('click', handleNavClick);
+	$tooltip.on('click', () => {
+		$tooltip.classed('is-visible', false);
+		$sidebarToggle.classed('is-bottom', false);
+		$graphic.classed('is-disable', false);
+	});
 }
 
 function setupFigure() {

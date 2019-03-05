@@ -149,12 +149,14 @@ button.sidebar__toggle
 	border none
 	top 50%
 	left $sidebar-width - 0.25
-	z-index set-index(overlay)
+	z-index set-index(top)
 	width 2.75rem
 	height 2.75rem
 	transition transform 500ms ease-in-out
 	&.is-hidden
 		transform translate($sidebar-width * -1, 0)
+	&.is-bottom
+		z-index set-index(bottom)
 	+mq('bp-m')
 		display none
 	&:hover

@@ -26,7 +26,9 @@ main
 		font-weight 500
 		set-type-size(root, false)
 		&:hover
-			background-color $bg-darkest
+			+mq('bp-m')
+				background-color $bg-darkest
+		
 		&.is-active
 			background-color $fg-lighter
 			color $bg
