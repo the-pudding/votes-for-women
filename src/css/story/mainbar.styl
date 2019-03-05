@@ -1,3 +1,16 @@
+.mainbar
+	position fixed
+	top 0
+	left 0
+	width 100%
+	margin-top $header-height
+	transform translate3d(0,0,0)
+	opacity 0.33
+	&.is-visible
+		opacity 1
+	+mq('bp-m')
+		opacity 1
+
 .section__graphic
 	user-select none
 	.graphic__platforms
@@ -12,10 +25,11 @@
 
 	.year
 		position relative
-		margin-left 3rem
 		margin-top 2rem
 		margin-bottom 4rem
-		border-left 2px solid $bg-darkest
+		+mq('bp-d')
+			margin-left 3rem
+			border-left 2px solid $bg-darkest
 		&.is-hidden
 			width 0
 			overflow hidden
@@ -24,12 +38,15 @@
 			pointer-events none
 
 	.hed
+		display none
 		margin 0
 		position absolute
 		transform-origin 50% 100%
 		transform rotate(-90deg) translateY(-2.5rem)
 		font-weight 700
 		set-type-size(x-large, false)
+		+mq('bp-d')
+			display block
 
 	.parties
 		display flex
@@ -40,7 +57,8 @@
 		&.is-hidden
 			display none
 		&:first-of-type
-			margin-left 2rem
+			+mq('bp-d')
+				margin-left 2rem
 
 		.grafs
 			display flex
@@ -78,6 +96,10 @@
 		span
 			border-bottom 2px solid $primary
 
+		&.party-year
+			display block
+			+mq('bp-d')
+				display none
 		&.party-name
 			set-type-size(large)
 			font-weight 700

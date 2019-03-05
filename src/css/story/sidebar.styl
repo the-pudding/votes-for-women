@@ -11,7 +11,10 @@
 	+mq('bp-m')
 		overflow hidden
 
-	.btn--about
+		&.is-hidden
+			transform translate(0, 0)
+	
+  .btn--about
 		display block
 		set-type-size(medium, true)
 		border none
@@ -157,5 +160,8 @@ button.sidebar__toggle
 		display none
 		&.is-visible
 			display block
-		svg
-			stroke $fg
+	svg
+		stroke $fg
+
+  +mq('bp-m')
+		display none
