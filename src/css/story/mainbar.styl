@@ -13,6 +13,8 @@
 
 .section__graphic
 	user-select none
+	// &.is-disable
+	// 	pointer-events none
 	.graphic__platforms
 		position absolute
 		top 0
@@ -149,18 +151,23 @@
 			transform translateY(-2.5%)
 
 	.tooltip
-		position absolute
-		top 50%
-		left 50%
-		width 24rem
+		position fixed
 		padding 1rem
 		visibility hidden
-		pointer-events none
 		z-index set-index(overlay)
 		background $bg
 		border 2px solid $fg-lightest
 		box-shadow 0 0 8px 2px rgba($fg, 0.2)
-		transform translate(1rem, 1rem)
+		width 90%
+		max-width 24rem
+		left 50%
+		top 50%
+		transform translate(-50%, -50%)
+		cursor pointer
+		+mq('bp-m')
+			position absolute
+			transform translate(1rem, 1rem)
+			pointer-events none
 		&.is-visible
 			visibility visible
 		&.is-highlight
