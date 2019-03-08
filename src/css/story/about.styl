@@ -11,13 +11,27 @@
 			color $fg-lighter
 			border-bottom 1px solid $fg-lighter
 
+	.about__content
+		margin 2rem auto 0 auto
+
+		p
+			set-type-size(small)
+			+mq('bp-6')
+				set-type-size(root)
+
+	.about__collab
+		margin 0 auto 1rem auto
+
+		p
+			font-weight 600
+			set-type-size(small)
+			+mq('bp-6')
+				set-type-size(root)
+
 	.about__content, .about__exhibit, .about__collab
-		margin 0 auto
 		max-width $column-width
 		width 90%
-		margin-bottom 2rem
-		+mq('bp-m')
-			border-top 2px solid $fg-lightest
+		//margin-bottom 2rem
 
 	.about__exhibit
 		display flex
@@ -42,8 +56,17 @@
 		+mq('bp-m')
 			display flex
 		svg
-			height 5rem
-
+			height 3rem
+			+mq('bp-5')
+				height 4rem
+		#wordmark
+			width 8rem
+			+mq('bp-5')
+				width 9rem
+		a
+			border-bottom none
+			&:hover
+				opacity 0.7		
 
 	.about__close
 		border none

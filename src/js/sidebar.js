@@ -4,6 +4,7 @@ import Mainbar from './mainbar';
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
 const $sidebar = $main.select('.sidebar');
+const $sidebarFade = $main.select('.sidebar__fade');
 const $slider = $main.select('.slider');
 const $btnSort = $sidebar.selectAll('.nav__sort button');
 const $btnFilterParty = $sidebar.selectAll('.nav__filter-party button');
@@ -23,6 +24,7 @@ function resize() {}
 function handleToggleClick() {
 	const hidden = $sidebar.classed('is-hidden');
 	$sidebar.classed('is-hidden', !hidden);
+	$sidebarFade.classed('is-hidden', !hidden);
 	$btnToggle.classed('is-hidden', !hidden);
 	$mainbar.classed('is-visible', !hidden);
 

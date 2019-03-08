@@ -6,7 +6,7 @@
 	max-width $sidebar-width
 	box-shadow 0 2px 7px 1px rgba($fg, 0.25)
 	transition transform 500ms ease-in-out
-	
+
 	+mq('bp-m')
 		overflow hidden
 		&.is-hidden
@@ -15,11 +15,15 @@
 	&.is-hidden
 		transform translate($sidebar-width * -1, 0)
 
-	
+
 	.btn--about
 		display block
-		set-type-size(medium, true)
+		line-height 1.4
 		border none
+		font-weight 700
+		text-transform uppercase
+		color $fg
+		set-type-size(small, true)
 		text-align left
 		padding 0
 		margin-top 3rem
@@ -32,9 +36,9 @@
 			margin-right 0.25rem
 			svg
 				stroke $fg
-				width 1.5rem
-				transform translateY(20%)
-		
+				width 1.25rem
+				transform translateY(30%)
+
 		+mq('bp-m')
 			display none
 
@@ -117,13 +121,14 @@
 		svg
 			width 1.25rem
 			vertical-align middle
-			margin-left 0.25em
+			margin-right 0.25em
 			stroke $fg
 			transform translateY(-5%)
 
 
 	.sidebar__credit
 		margin-top 1rem
+		set-type-size(small, true)
 		a
 			&:hover
 				color $fg-lighter
@@ -168,3 +173,25 @@ button.sidebar__toggle
 
   +mq('bp-m')
 		display none
+
+.sidebar__fade
+	position fixed
+	max-width $sidebar-width
+	width $sidebar-width
+	width 100%
+	bottom 0
+	left 0
+	transition transform 500ms ease-in-out
+	&.is-hidden
+		transform translate($sidebar-width * -1, 0)
+	+mq('bp-m')
+		&.is-hidden
+			transform translate(0, 0)
+
+	.fade
+		position absolute
+		left 0
+		bottom 0
+		width 100%
+		height 10rem
+		background-image: linear-gradient(rgba($bg, 0), rgba($bg, 1))

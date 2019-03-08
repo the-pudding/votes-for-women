@@ -3,7 +3,7 @@
 		<h1 class='info__hed'>{{{doc.hed}}}</h1>
 		<div class='info__text'>
 			<p class='text__intro'>{{{doc.intro}}}</p>
-			<p class='text__video'><button>{{{doc.video}}} @@include('play-circle.svg')</button></p>
+			<p class='text__video'><button>@@include('play-circle.svg'){{{doc.video}}}</button></p>
 			<p class='text__instruction'>{{{doc.instruction}}}</p>
 		</div>
 	</div>
@@ -56,3 +56,7 @@
 	<span class='is-visible'>@@include('chevrons-left.svg')</span>
 	<span>@@include('chevrons-right.svg')</span>
 </button>
+
+<div class='sidebar__fade'>
+	<div class='fade'></div>
+</div>
