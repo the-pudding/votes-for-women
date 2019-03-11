@@ -2,6 +2,12 @@
 
 body
 	font-family $sans
+	&.is-noscroll
+		position fixed
+		overflow-y hidden
+		+mq('bp-m')
+			position static
+			overflow auto
 
 main	
 	section

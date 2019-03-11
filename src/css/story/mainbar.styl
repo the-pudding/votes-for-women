@@ -54,8 +54,10 @@
 		display flex
 
 	.party
-		margin 0 1rem
-		width 11rem
+		margin 0 0.75rem
+		width 10rem
+		+mq('bp-m')
+			width 11rem
 		&.is-hidden
 			display none
 		&:first-of-type
@@ -95,7 +97,9 @@
 		margin 0
 		color $fg-lighter
 		line-height 1.2
-		set-type-size(root)
+		set-type-size(small)
+		+mq('bp-m')
+			set-type-size(root)
 
 		span
 			border-bottom 2px solid $primary
@@ -105,10 +109,13 @@
 			+mq('bp-d')
 				display none
 		&.party-name
-			set-type-size(large)
+			set-type-size(medium)
 			font-weight 700
 			color $fg
-			display flex
+			
+			+mq('bp-m')
+				display flex
+				set-type-size(large)
 
 		.doc-link
 			border-bottom none
@@ -117,10 +124,17 @@
 			border-bottom none
 
 			svg
-				width 1rem
-				margin 0.15rem 0 0 0.25rem
-				&:hover
-					stroke $fg
+				width 0.75rem
+				height 1em
+				margin 0
+				transform translateY(12.5%)
+				margin-left 0.25em
+				+mq('bp-m')
+					width 1rem
+					height auto
+					margin 0.15rem 0 0 0.25rem
+					&:hover
+						stroke $fg
 
 
 	.graphic__nav

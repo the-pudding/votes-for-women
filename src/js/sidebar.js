@@ -1,6 +1,7 @@
 import noUiSlider from 'nouislider';
 import Mainbar from './mainbar';
 
+const $body = d3.select('body');
 const $main = d3.select('main');
 const $mainbar = $main.select('.mainbar');
 const $sidebar = $main.select('.sidebar');
@@ -19,7 +20,11 @@ const yearValues = {
 	end: 2016
 };
 
-function resize() {}
+function resize() {
+	const h = window.innerHeight;
+	const top = Math.floor(h / 2);
+	$btnToggle.style('top', `${top}px`);
+}
 
 function handleToggleClick() {
 	const hidden = $sidebar.classed('is-hidden');
@@ -41,6 +46,12 @@ function handleToggleClick() {
 		const active = $btn.classed('is-active');
 		return !active;
 	});
+
+	$body.classed('is-noscroll', !hidden);
+}
+
+function handleMainbarClick() {
+	if (!$mainbar.classed('is-visible')) handleToggleClick();
 }
 
 function handleSwitcherClick() {
@@ -131,11 +142,13 @@ function setupNav() {
 	$btnFilterIssues.on('click', handleFilterIssuesClick);
 	$btnToggle.on('click', handleToggleClick);
 	$switcherButton.on('click', handleSwitcherClick);
+	$mainbar.on('click', handleMainbarClick);
 }
 
 function init() {
 	setupSlider();
 	setupNav();
+	resize();
 }
 
 export default { init, resize, hide };

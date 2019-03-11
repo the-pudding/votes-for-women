@@ -104,26 +104,28 @@ function handleGrafEnter(d) {
 }
 
 function handleMouseMove() {
-	const [x, y] = d3.mouse(this);
-	const $grafs = d3.select(this);
-	const $graf = $grafs.selectAll('.graf');
-	const count = $graf.size() - 1;
-	let index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
-	if (mobile) {
-		// find nearest
-		const issues = $graf.data().filter(d => d.issue);
-		if (issues.length) {
-			issues.sort((a, b) =>
-				d3.ascending(Math.abs(a.index - index), Math.abs(b.index - index))
-			);
-			index = issues[0].index;
+	if ($mainbar.classed('is-visible')) {
+		const [x, y] = d3.mouse(this);
+		const $grafs = d3.select(this);
+		const $graf = $grafs.selectAll('.graf');
+		const count = $graf.size() - 1;
+		let index = Math.min(Math.max(0, Math.floor(y / (GRAF_H + GRAF_M))), count);
+		if (mobile) {
+			// find nearest
+			const issues = $graf.data().filter(d => d.issue);
+			if (issues.length) {
+				issues.sort((a, b) =>
+					d3.ascending(Math.abs(a.index - index), Math.abs(b.index - index))
+				);
+				index = issues[0].index;
+			}
 		}
+		$graf
+			.filter((d, i) => i === index)
+			.each((d, i, n) => {
+				handleGrafEnter.call(n[i], d);
+			});
 	}
-	$graf
-		.filter((d, i) => i === index)
-		.each((d, i, n) => {
-			handleGrafEnter.call(n[i], d);
-		});
 }
 
 function updateFigure(figureH) {
@@ -261,13 +263,15 @@ function getNextPos({ dir, x }) {
 	// mobile
 	if (mobileSlide) {
 		const $p = $platforms.select('.year:not(.is-hidden) .party');
-		const partyW = $p.node().offsetWidth + REM * 2;
+		const partyW = $p.node().offsetWidth + REM * 0.75 * 2;
 		let count = $platforms.selectAll('.year:not(.is-hidden) .party').size();
 		count -= offX ? 0 : 2;
 
 		if (dir === -1 && x >= 0) return 0;
 		if (dir === 1 && x < offX + count * partyW * -1) return 0;
-		return partyW * dir * -1;
+
+		const numOnScreen = Math.floor($graphic.node().offsetWidth / partyW);
+		return partyW * numOnScreen * dir * -1;
 	}
 
 	// desktop
