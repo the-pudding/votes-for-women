@@ -305,10 +305,13 @@ function handleNavClick() {
 
 function setupNav() {
 	$mainbar.selectAll('.graphic__nav button').on('click', handleNavClick);
-	$tooltip.on('click', () => {
+	$tooltip.on('click touchend', () => {
 		$tooltip.classed('is-visible', false);
 		$sidebarToggle.classed('is-bottom', false);
 		$graphic.classed('is-disable', false);
+		if (mobile) {
+			$figure.select('.is-active').classed('is-active', false);
+		}
 	});
 }
 
