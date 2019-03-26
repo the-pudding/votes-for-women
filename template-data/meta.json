@@ -1,16 +1,16 @@
 {
-  "url": "https://pudding.cool/votes-for-women/",
-  "keywords": "women, issues, political, party, platforms, 19th ammendement",
-  "imgFacebook": "https://pudding.cool/votes-for-women/assets/social/social-facebook.jpg",
-  "imgTwitter": "https://pudding.cool/votes-for-women/assets/social/social-twitter.jpg",
-  "author": {
-    "name": "Russell Goldenberg",
-    "url": "https://pudding.cool/author/russell-goldenberg",
-    "twitterHandle": "@codenberg"
-  },
-  "author2": {
-    "name": "Jan Diehm",
-    "url": "https://pudding.cool/author/jan-diehm"
-  },
-  "analytics": ""
+	"url": "https://pudding.cool/projects/votes-for-women/",
+	"keywords": "women, issues, political, party, platforms, 19th ammendement",
+	"imgFacebook": "https://pudding.cool/projects/votes-for-women/assets/social/social-facebook.jpg",
+	"imgTwitter": "https://pudding.cool/projects/votes-for-women/assets/social/social-twitter.jpg",
+	"author": {
+		"name": "Russell Goldenberg",
+		"url": "https://pudding.cool/author/russell-goldenberg",
+		"twitterHandle": "@codenberg"
+	},
+	"author2": {
+		"name": "Jan Diehm",
+		"url": "https://pudding.cool/author/jan-diehm"
+	},
+	"analytics": ""
 }
