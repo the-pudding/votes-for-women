@@ -10,9 +10,9 @@ function resize() {
 	// only do resize on width changes, not height
 	// (remove the conditional if you want to trigger on height change)
 	const width = $body.node().offsetWidth;
-	console.log({ previousWidth, width });
+	// console.log({ previousWidth, width });
 	if (previousWidth !== width) {
-		console.log('resize');
+		// console.log('resize');
 		previousWidth = width;
 		graphic.resize();
 	}
